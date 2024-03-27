@@ -4,7 +4,17 @@ import dbConnection from "./db/index.js";
 const app = express();
 
 
-dbConnection();
+dbConnection()
+.then(()=>{
+    app.listen(process.env.PORT,()=>{
+        console.log(`Port is running on ${process.env.PORT}`);
+    })
+    app.on("error",(error)=>{
+            console.log("ERROR: ", error);
+            throw error
+        })
+})
+.catch((error)=>console.log("Error: ", error))
 
 
 // ;(async()=>{
@@ -21,12 +31,3 @@ dbConnection();
 //         console.error("Error: ", error)
 //     }
 // })()
-
-
-app.get("/",(res,req)=>{
-    req.send("hello world")
-})
-
-app.listen(process.env.PORT,()=>{
-    console.log(`Port is running on ${process.env.PORT}`);
-})
